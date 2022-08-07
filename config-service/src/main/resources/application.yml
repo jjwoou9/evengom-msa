@@ -8,4 +8,4 @@ spring:
     config:
       server:
         git:
-          uri:
+          uri: file://C:\Users\user\Desktop\develop\git-local-repo
