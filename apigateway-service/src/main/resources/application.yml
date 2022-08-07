@@ -90,5 +90,11 @@ spring:
             - AddResponseHeader=second-response, second-response-header2
             #            - name: CustomFilter
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, httptrace
+
 token:
   secret: user_token
