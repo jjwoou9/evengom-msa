@@ -28,7 +28,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         log.info("WebSecurity  configure http {}",  http);
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/users/**").permitAll()
+
+        http.authorizeRequests().antMatchers("/actuator/**").permitAll();
+        http.authorizeRequests().antMatchers("/**").permitAll()
                 .and()
                 .addFilter(getAuthenticationFilter());
 //		http.authorizeRequests().antMatchers("/**")
