@@ -5,6 +5,7 @@ spring:
   application:
     name: config-service
   rabbitmq:
+    dynamic: true
     host: 127.0.0.1
     port: 5672
     username: guest
@@ -26,4 +27,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: health, busrefresh
+        include: health, busrefresh, bus-env, bus-refresh
