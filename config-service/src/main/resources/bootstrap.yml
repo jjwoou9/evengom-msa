@@ -1,0 +1,6 @@
+encrypt:
+  key-store:
+    location: file:C:\Users\user\Desktop\develop\evengom\keystore\apiEncryptionKey.jks
+    alias: apiEncryptionKey
+    password: qwer1234
+#  key: abcdefghijklmnopqrstuvewxyz1234567890
