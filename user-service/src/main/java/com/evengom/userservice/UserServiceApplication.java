@@ -23,10 +23,10 @@ public class UserServiceApplication {
         return new BCryptPasswordEncoder();
     }
 
-/*    @Bean
+    @Bean
     @LoadBalanced
     public RestTemplate getRestTemplate(){
         return new RestTemplate();
-    }*/
+    }
 
 }
