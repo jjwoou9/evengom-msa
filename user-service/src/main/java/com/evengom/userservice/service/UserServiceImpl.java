@@ -1,5 +1,6 @@
 package com.evengom.userservice.service;
 
+import com.evengom.userservice.client.OrderServiceClient;
 import com.evengom.userservice.dto.UserDto;
 import com.evengom.userservice.jpa.UserEntity;
 import com.evengom.userservice.jpa.UserRepository;
@@ -8,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
@@ -31,6 +31,7 @@ public class UserServiceImpl implements UserService {
     BCryptPasswordEncoder passwordEncoder;
     Environment env;
     RestTemplate restTemplate;
+    OrderServiceClient orderServiceClient;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -44,11 +45,13 @@ public class UserServiceImpl implements UserService {
                 new ArrayList<>());
     }
 
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, Environment env, RestTemplate restTemplate) {
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, Environment env, RestTemplate restTemplate, OrderServiceClient orderServiceClient) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.env = env;
         this.restTemplate = restTemplate;
+        this.orderServiceClient = orderServiceClient;
     }
 
     @Override
@@ -82,14 +85,16 @@ public class UserServiceImpl implements UserService {
 //        List<ResponseOrder> orders=new ArrayList();
 
         /* Using RestTemaplate */
-        String envUrl = env.getProperty("order_service.url");
-        String orderUrl = String.format(env.getProperty("order_service.url"), userId);
-        ResponseEntity<List<ResponseOrder>> orderListResponse =
-                restTemplate.exchange(orderUrl, HttpMethod.GET, null,
-                    new ParameterizedTypeReference<List<ResponseOrder>>() {
-                });
+//        String envUrl = env.getProperty("order_service.url");
+//        String orderUrl = String.format(env.getProperty("order_service.url"), userId);
+//        ResponseEntity<List<ResponseOrder>> orderListResponse =
+//                restTemplate.exchange(orderUrl, HttpMethod.GET, null,
+//                    new ParameterizedTypeReference<List<ResponseOrder>>() {
+//                });
+//        List<ResponseOrder> orders= orderListResponse.getBody();
 
-        List<ResponseOrder> orders= orderListResponse.getBody();
+        /* Using FeignClient */
+        List<ResponseOrder> orders = orderServiceClient.getOrders(userId);
 
         userDto.setOrders(orders);
 
